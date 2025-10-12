@@ -74,7 +74,7 @@ while True:
         foundFace = False
         continue
 
-    # 6. Draw a rectangle around each detected face    
+    # Draw a rectangle around each detected face    
     for (x, y, w, h) in faces:
         if largestFace is not None and (x, y, w, h) == largestFace:
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
