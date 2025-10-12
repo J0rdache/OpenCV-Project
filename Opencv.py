@@ -1,8 +1,6 @@
 from math import sqrt
 import cv2
-
-
-
+import time
 # 1. Load the Haar Cascade classifier for face detection
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
 
@@ -18,7 +16,6 @@ cap.set(cv2.CAP_PROP_FPS, 12)
 frameWidth = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
 frameHeight = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
 frameRate = cap.get(cv2.CAP_PROP_FPS)
-frameCounter = 0
 
 text = str(int(frameWidth)) + " x " + str(int(frameHeight)) + ", " + str(int(frameRate)) + " FPS"
 bottomLeft = (0, int(frameHeight - 0.01 * frameHeight))
@@ -27,8 +24,9 @@ fontScale = 0.85
 color = (0, 0, 255)
 thickness = 2
 lineType = cv2.LINE_AA
+lastPrintTime = time.time()
 
-
+foundFace = False
 
 # 3. Start a loop to read frames from the webcam
 while True:
@@ -49,17 +47,31 @@ while True:
     # This returns a list of rectangles (x, y, width, height) for each detected face
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
 
-    # 6. Draw a rectangle around each detected face
-    largestFace = (5000, 5000, 0, 0)
+    if not foundFace:
+        largestFace = (5000, 5000, 0, 0)
+        for (x, y, w, h) in faces:
+            if w * h > largestFace[2] * largestFace[3]:
+                largestFace = (x, y, w, h)
+                foundFace = True
+
+    updatedFace = False
     for (x, y, w, h) in faces:
-        if w * h > largestFace[2] * largestFace[3]:
+        if (x > largestFace[0] - 25 and x < largestFace[0] + 25) and (y > largestFace[1] - 25 and y < largestFace[1] + 25):
             largestFace = (x, y, w, h)
-        # cv2.rectangle(image, start_point, end_point, color, thickness)
-        # Note: The color is in BGR (Blue, Green, Red) format
+            updatedFace = True
+            #print("Hello1")
+
+    if not updatedFace and len(faces) > 0:
+        foundFace = False
+        #print("Hello2")
+        continue
+
+    # 6. Draw a rectangle around each detected face    
     for (x, y, w, h) in faces:
         if largestFace is not None and (x, y, w, h) == largestFace:
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cv2.putText(frame, "Target", (x, y + h,), font, fontScale, color, thickness, lineType)
+            cv2.putText(frame, str(x), (int(frameWidth/2), int(frameHeight - 0.01 * frameHeight)), font, fontScale, (255, 0, 0), thickness, lineType)
         else:
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
     (x, y, w, h) = largestFace
@@ -72,11 +84,11 @@ while True:
     # waitKey(1) means it will wait 1ms for a key press
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
-    
-    if frameCounter > frameRate / 2:
+    currentTime = time.time()
+    if currentTime - lastPrintTime >= 0.5:
         print(str(x + w / 2) + ", " + str(y + h / 2))
-        frameCounter = 0
-    frameCounter += 1
+        lastPrintTime = currentTime
+
     
 
 # 9. Clean up: release the webcam and close all OpenCV windows
