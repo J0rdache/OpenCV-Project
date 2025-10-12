@@ -34,7 +34,7 @@ def main():
             targetFace = fn.findTarget(faces)
         else:
             # Attempt to find the target face in a new frame
-            updatedFace = fn.trackTargetFace(faces, targetFace, 50)
+            updatedFace = fn.trackTargetFace(faces, targetFace)
             if updatedFace is not None:
                 targetFace = updatedFace
                 lastGraceTime = time.time()
@@ -62,7 +62,6 @@ def main():
         
         frame = fn.drawOnFrame(frame, faces, targetFace, camInfo, targetAvgX)
         cv2.imshow('USRT Face Tracking', frame)
-
         currentTime = time.time()
         if targetFace and (currentTime - lastPrintTime >= 0.1):
             (x, y, w, h) = targetFace
