@@ -10,6 +10,7 @@ def main():
     cap, camInfo = fn.initializeCamera()
 
     targetFace = None
+    targetGrace = 0
     lastPrintTime = time.time()
 
     while True:
@@ -34,9 +35,12 @@ def main():
             updatedFace = fn.trackTargetFace(faces, targetFace)
             if updatedFace is not None:
                 targetFace = updatedFace
+            elif targetGrace  < camInfo['fps'] // 2:
+                targetGrace += 1
             else:
                 # If the target face was not found again, a new face must be found next frame
                 targetFace = None
+                targetGrace = 0
         
         frame = fn.drawOnFrame(frame, faces, targetFace, camInfo)
         cv2.imshow('USRT Face Tracking', frame)
