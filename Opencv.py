@@ -69,6 +69,9 @@ while True:
             largestFace = (x, y, w, h)
             updatedFace = True
 
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
     # If the target face was not found in the list of faces, then a new face must be found
     if not updatedFace and len(faces) > 0:
         foundFace = False
@@ -93,8 +96,7 @@ while True:
 
     # Wait for the 'q' key to be pressed to exit the loop
     # waitKey(1) means it will wait 1ms for a key press
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+    
 
     # Print the xy coordinates of the target face every half second
     currentTime = time.time()
