@@ -1,6 +1,6 @@
 import cv2
 
-def initializeCamera(width = 640, height = 480, fps = 12):
+def initializeCamera(width = 640, height = 480, fps = 8):
     
     # Initialize video capture from the default webcam (index 0)
     cap = cv2.VideoCapture(0)

@@ -1,6 +1,7 @@
 import cv2
 import time
 import functions as fn
+import serial
 
 def main():
     # Load the Haar Cascade classifier
@@ -12,9 +13,18 @@ def main():
     targetFace = None
     lastPrintTime = time.time()
     lastGraceTime = time.time()
+    lastSendTime = time.time()
     targetXList = []
     xListPos = 0
     
+    try:
+        pico = serial.Serial(port='COM6', baudrate=9600, timeout=0.1)
+        time.sleep(2)
+        print("Connected to Pico")
+    except serial.SerialException as e:
+        print(f"Error: Could not open port. Is the Pico connected? \n{e}")
+        pico = None
+
     while True:
         # Read a single frame from the webcam
         ret, frame = cap.read()
@@ -66,7 +76,15 @@ def main():
         if targetFace and (currentTime - lastPrintTime >= 0.1):
             (x, y, w, h) = targetFace
             print(f"Target Center: {targetAvgX}")
+
+            if pico and currentTime - lastSendTime > 0.02:
+                dataToSend = f"{targetAvgX}\n".encode('utf-8')
+                pico.write(dataToSend)
+                lastSendTime = currentTime
+
             lastPrintTime = currentTime
+
+            
         
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
