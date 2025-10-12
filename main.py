@@ -7,7 +7,7 @@ def main():
     face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
 
     # initialize the camera
-    cap, camInfo = fn.initializeCamera()
+    cap, camInfo = fn.initializeCamera(320, 240)
 
     targetFace = None
     lastPrintTime = time.time()
@@ -26,7 +26,7 @@ def main():
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         # Detect faces in the grayscale frame
         # This returns a list of rectangles (x, y, width, height) for each detected face
-        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(15, 15))
+        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=2, minSize=(1, 1))
         
 
         if targetFace is None:

@@ -38,10 +38,10 @@ def findTarget(faces):
             largestFace = (x, y, w, h)
     return largestFace
 
-def trackTargetFace(faces, lastKnownTarget, tolerance=1.00):
+def trackTargetFace(faces, lastKnownTarget, tolerance=0.75):
     # Find the target face in a new frame based on the last known position.
     # Returns the updated face, or none if it is not found
-    # The tolerance is the maximum horizontal and vertical distance the new face  can be from the old one in a new frame
+    # The tolerance is the percentage of the width or height of the last known target box that is the maximum horizontal and vertical distance the new face can be from the old one in a new frame
     (lx, ly, lw, lh) = lastKnownTarget
     for (x, y, w, h) in faces:
         if (x  + w // 2 > lx + lw // 2 - tolerance * lw and x + w // 2 < lx + lw //2 + tolerance * lw) and (y + h // 2 > ly + lh // 2 - tolerance * lh and y + h // 2 < ly + lh // 2 + tolerance * lh):
