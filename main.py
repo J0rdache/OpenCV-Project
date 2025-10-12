@@ -10,8 +10,8 @@ def main():
     cap, camInfo = fn.initializeCamera()
 
     targetFace = None
-    targetGrace = 0
     lastPrintTime = time.time()
+    lastGraceTime = time.time()
     targetXList = []
     xListPos = 0
     
@@ -34,15 +34,13 @@ def main():
             targetFace = fn.findTarget(faces)
         else:
             # Attempt to find the target face in a new frame
-            updatedFace = fn.trackTargetFace(faces, targetFace)
+            updatedFace = fn.trackTargetFace(faces, targetFace, 50)
             if updatedFace is not None:
                 targetFace = updatedFace
-            elif targetGrace  < camInfo['fps'] // 2:
-                targetGrace += 1
-            else:
+                lastGraceTime = time.time()
+            elif time.time() - lastGraceTime > 0.5:
                 # If the target face was not found again, a new face must be found next frame
                 targetFace = None
-                targetGrace = 0
         if targetFace is not None:
             centerX = targetFace[0] + targetFace[2] // 2
             if len(targetXList) < 10:

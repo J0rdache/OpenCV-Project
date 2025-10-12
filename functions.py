@@ -42,9 +42,9 @@ def trackTargetFace(faces, lastKnownTarget, tolerance=25):
     # Find the target face in a new frame based on the last known position.
     # Returns the updated face, or none if it is not found
     # The tolerance is the maximum horizontal and vertical distance the new face  can be from the old one in a new frame
-    (lx, ly, _, _) = lastKnownTarget
+    (lx, ly, lw, lh) = lastKnownTarget
     for (x, y, w, h) in faces:
-        if (x > lx - tolerance and x < lx + tolerance) and (y > ly - tolerance and y < ly + tolerance):
+        if (x  + w // 2 > lx + lw // 2 - tolerance and x + w // 2 < lx + lw //2 + tolerance) and (y + h // 2 > ly + lh // 2 - tolerance and y + h // 2 < ly + lh // 2 + tolerance):
             return (x, y, w, h)
     return None
 
