@@ -3,7 +3,7 @@ import cv2
 def initializeCamera(width = 640, height = 480, fps = 12):
     
     # Initialize video capture from the default webcam (index 0)
-    cap = cv2.VideoCapture(1)
+    cap = cv2.VideoCapture(0)
 
     # Check if the webcam is opened correctly
     if not cap.isOpened():
@@ -48,7 +48,7 @@ def trackTargetFace(faces, lastKnownTarget, tolerance=25):
             return (x, y, w, h)
     return None
 
-def drawOnFrame(frame, faces, targetFace, camInfo):
+def drawOnFrame(frame, faces, targetFace, camInfo, targetAvgX):
     # Draws rectangles around faces, displays camera info, and displays the horizontal coordinates of the target face
     font = cv2.FONT_HERSHEY_SIMPLEX
     fontScale = 0.85
@@ -58,7 +58,7 @@ def drawOnFrame(frame, faces, targetFace, camInfo):
         if targetFace is not None and (x, y, w, h) == targetFace:
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), thickness)
             cv2.putText(frame, "Target", (x, y - 10), font, fontScale, (0, 255, 0), thickness)
-            targetXText = f"Target X: {x + w // 2}"
+            targetXText = f"Target X: {targetAvgX}"
             cv2.putText(frame, targetXText, (10, camInfo['height'] - 40), font, fontScale, (255, 0, 0), thickness)
         else:
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), thickness)

@@ -12,7 +12,9 @@ def main():
     targetFace = None
     targetGrace = 0
     lastPrintTime = time.time()
-
+    targetXList = []
+    xListPos = 0
+    
     while True:
         # Read a single frame from the webcam
         ret, frame = cap.read()
@@ -41,14 +43,32 @@ def main():
                 # If the target face was not found again, a new face must be found next frame
                 targetFace = None
                 targetGrace = 0
+        if targetFace is not None:
+            centerX = targetFace[0] + targetFace[2] // 2
+            if len(targetXList) < 10:
+                targetXList.append(centerX)
+                xListPos += 1
+            elif xListPos < 10:
+                targetXList[xListPos] = centerX
+                xListPos += 1
+            else:
+                xListPos = 0
+                targetXList[xListPos] = centerX
+                xListPos += 1
+
+                
+        if len(targetXList) != 0:
+            targetAvgX = sum(targetXList) // len(targetXList)
+        else:
+            targetAvgX = 0
         
-        frame = fn.drawOnFrame(frame, faces, targetFace, camInfo)
+        frame = fn.drawOnFrame(frame, faces, targetFace, camInfo, targetAvgX)
         cv2.imshow('USRT Face Tracking', frame)
 
         currentTime = time.time()
         if targetFace and (currentTime - lastPrintTime >= 0.1):
             (x, y, w, h) = targetFace
-            print(f"Target Center: {x + w // 2}")
+            print(f"Target Center: {targetAvgX}")
             lastPrintTime = currentTime
         
         if cv2.waitKey(1) & 0xFF == ord('q'):
