@@ -1,19 +1,35 @@
 from math import sqrt
 import cv2
 
+
+
 # 1. Load the Haar Cascade classifier for face detection
-face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
 
 # 2. Initialize video capture from the default webcam (index 0)
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 
 # Check if the webcam is opened correctly
 if not cap.isOpened():
     raise IOError("Cannot open webcam")
-
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+cap.set(cv2.CAP_PROP_FPS, 12)
 frameWidth = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
 frameHeight = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+frameRate = cap.get(cv2.CAP_PROP_FPS)
 frameCounter = 0
+
+text = str(int(frameWidth)) + " x " + str(int(frameHeight)) + ", " + str(int(frameRate)) + " FPS"
+bottomLeft = (0, int(frameHeight - 0.01 * frameHeight))
+font = cv2.FONT_HERSHEY_SIMPLEX
+fontScale = 0.85
+color = (0, 0, 255)
+thickness = 2
+lineType = cv2.LINE_AA
+
+
+
 # 3. Start a loop to read frames from the webcam
 while True:
     # Read a single frame from the webcam
@@ -34,22 +50,21 @@ while True:
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
 
     # 6. Draw a rectangle around each detected face
-    closestx = 50000
-    closesty = 50000
-    closestw = 0
-    closesth = 0
-    foundBigFaceFlag = False
+    largestFace = (5000, 5000, 0, 0)
     for (x, y, w, h) in faces:
-        if w > closestw and h > closesth:
-            closestx = x
-            closesty = y
-            closestw = w
-            closesth = h
-            foundBigFaceFlag = True
+        if w * h > largestFace[2] * largestFace[3]:
+            largestFace = (x, y, w, h)
         # cv2.rectangle(image, start_point, end_point, color, thickness)
         # Note: The color is in BGR (Blue, Green, Red) format
+    for (x, y, w, h) in faces:
+        if largestFace is not None and (x, y, w, h) == largestFace:
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            cv2.putText(frame, "Target", (x, y + h,), font, fontScale, color, thickness, lineType)
+        else:
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
+    (x, y, w, h) = largestFace
+    cv2.putText(frame, text, bottomLeft, font, fontScale, color, thickness, lineType)
 
-    cv2.rectangle(frame, (closestx, closesty), (closestx+closestw, closesty+closesth), (0, 255, 0), 2)
     # 7. Display the resulting frame in a window
     cv2.imshow('Face Detection', frame)
 
@@ -58,8 +73,8 @@ while True:
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
     
-    if frameCounter > 25:
-        print(str(closestx + closestw / 2) + ", " + str(closesty + closesth / 2))
+    if frameCounter > frameRate / 2:
+        print(str(x + w / 2) + ", " + str(y + h / 2))
         frameCounter = 0
     frameCounter += 1
     
