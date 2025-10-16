@@ -9,7 +9,7 @@ def initializeCamera(width = 640, height = 480, fps = 8):
     if not cap.isOpened():
         raise IOError("Cannot open webcam")
     
-    # Force resolution to 640x480 and framerate to 12
+    # Force resolution to and framerate
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
     cap.set(cv2.CAP_PROP_FPS, fps)
