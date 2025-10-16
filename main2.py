@@ -11,7 +11,7 @@ CAMERA_HEIGHT = 240
 CAMERA_FPS = 8
 # (N)
 CAMERA_INDEX = 0
-# (File contianing cascade classifier)
+# (File containing cascade classifier)
 CASCADE_CLASSIFIER = 'haarcascade_frontalface_alt.xml'
 # (multiplier greater than 1)
 SCALE_FACTOR = 1.2
@@ -25,6 +25,12 @@ MOTION_TOLERANCE = 0.75
 TRACKING_GRACE = 0.5
 # (Number of frames)
 ROLLING_AVG_COUNT = 10
+# (Pulse width ms)
+SERVO_MIN = 0.5
+# (Pulse width ms)
+SERVO_MAX = 2.5
+# (Degrees per second)
+SPEED = 10
 
 def main():
     pass
