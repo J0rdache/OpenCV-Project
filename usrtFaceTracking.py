@@ -35,3 +35,21 @@ class FaceTracker:
         self.MotionTolerance = MotionTolerance
         self.TrackingGrace = TrackingGrace
         self.RollingAvgCount = RollingAvgCount
+
+    def findTarget(faces):
+        largestFace = None
+        maxArea = 0
+        for (x, y, w, h) in faces:
+            if w * h > maxArea:
+                maxArea = w * h
+                largestFace = (x, y, w, h)
+        return largestFace
+    
+    def trackTargetFace(faces, lastKnownTarget, tolerance):
+        (lx, ly, lw, lh) = lastKnownTarget
+        ht = tolerance * lw
+        vt = tolerance * lh
+        for (x, y, w, h) in faces:
+            if (x + w // 2 > lx + lw // 2 - ht and x + w // 2 < lx + lw // 2 + ht and y + h // 2 > ly + lh // 2 - vt and y + h // 2 < ly + lh // 2 + vt):
+                return (x, y, w, h)
+        return None
