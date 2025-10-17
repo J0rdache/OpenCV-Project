@@ -1,5 +1,3 @@
-import queue
-import time
 import RPi.GPIO as GPIO
 
 
@@ -29,12 +27,12 @@ class ServoController:
     def runServoLoop(self):
         if self.status == 1:
             self.currentDuty = self.minDuty + (self.maxDuty - self.minDuty) / 2
-        elif self.status == 3:
+        elif self.status == 3 + self.reversed:
             if (self.currentDuty - self.speed * 0.02 > self.minDuty):
                 self.currentDuty -= self.speed * 0.02
             else:
                 self.currentDuty = self.minDuty
-        elif self.status == 4:
+        elif self.status == 4 - self.reversed:
             if (self.currentDuty + self.speed * 0.02 < self.maxDuty):
                 self.currentDuty += self.speed * 0.02
             else:
