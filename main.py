@@ -29,7 +29,7 @@ ROLLING_AVG_COUNT = 5
 # (Pixels)
 CENTER_WIDTH = 10
 # (N)
-SERVO_PIN = 15
+SERVO_PIN = 12
 # (Pulse width ms)
 SERVO_MIN = 0.5
 # (Pulse width ms)
