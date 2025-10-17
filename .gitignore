@@ -2,5 +2,5 @@ haarcascade_frontalface_default.xml
 image-18.png
 haarcascade_frontalface_alt.xml
 opencvprof.prof
-__pychache__
+__pycache__
 .venv
