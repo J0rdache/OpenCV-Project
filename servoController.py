@@ -4,13 +4,14 @@ import RPi.GPIO as GPIO
 
 
 class ServoController:
-    def __init__(self, servo_pin, minMs, maxMs, speed):
+    def __init__(self, servo_pin, minMs, maxMs, speed, reverse):
         self.pin = servo_pin
         self.minDuty = (minMs * 100) / 20
         self.maxDuty = (maxMs * 100) / 20
         self.speed = (speed / 180) * (self.maxDuty - self.minDuty)
         self.currentDuty = self.minDuty + (self.maxDuty - self.minDuty) / 2
         self.status = 1
+        self.reversed = reverse
 
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.pin, GPIO.OUT)
