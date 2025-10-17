@@ -1,5 +1,7 @@
 import queue
 import time
+import RPi.GPIO as GPIO
+
 
 class ServoController:
     def __init__(self, servo_pin, minMs, maxMs, speed):
@@ -9,6 +11,16 @@ class ServoController:
         self.speed = (speed / 180) * (self.maxDuty - self.minDuty)
         self.currentDuty = self.minDuty + (self.maxDuty - self.minDuty) / 2
         self.status = 1
+
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(self.pin, GPIO.OUT)
+
+        self.pwm = GPIO.PWM(self.pin, 50)
+        self.pwm.start(self.currentDuty)
+    
+    def __del__(self):
+        self.pwm.stop()
+        GPIO.cleanup()
 
     def updateStatus(self, status):
         self.status = status
@@ -26,4 +38,4 @@ class ServoController:
                 self.currentDuty += self.speed * 0.02
             else:
                 self.currentDuty = self.maxDuty
-        print(self.currentDuty)
+        self.pwm.ChangeDutyCycle(self.currentDuty)
