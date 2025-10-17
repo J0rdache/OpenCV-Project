@@ -1,4 +1,4 @@
-import RPi.GPIO as GPIO
+import lgpio
 
 
 class ServoController:
@@ -10,16 +10,15 @@ class ServoController:
         self.currentDuty = self.minDuty + (self.maxDuty - self.minDuty) / 2
         self.status = 1
         self.reversed = reverse
+        self.frequency = 50
 
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(self.pin, GPIO.OUT)
+        self.handle = lgpio.gpiochip_open(4)
 
-        self.pwm = GPIO.PWM(self.pin, 50)
-        self.pwm.start(self.currentDuty)
+        lgpio.tx_pwm(self.handle, self.pin, self.frequency, self.currentDuty)
     
     def __del__(self):
-        self.pwm.stop()
-        GPIO.cleanup()
+        lgpio.tx_pwm(self.handle, self.pin, self.frequency, 0)
+        lgpio.gpiochip_close(self.handle)
 
     def updateStatus(self, status):
         self.status = status
@@ -37,4 +36,4 @@ class ServoController:
                 self.currentDuty += self.speed * 0.02
             else:
                 self.currentDuty = self.maxDuty
-        self.pwm.ChangeDutyCycle(self.currentDuty)
+        lgpio.tx_pwm(self.handle, self.pin, self.frequency, self.currentDuty)
