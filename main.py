@@ -11,7 +11,7 @@ CAMERA_HEIGHT = 240
 # (Frames per second)
 CAMERA_FPS = 8
 # (N)
-CAMERA_INDEX = 1
+CAMERA_INDEX = 0
 # (File containing cascade classifier)
 CASCADE_CLASSIFIER = 'haarcascade_frontalface_alt.xml'
 # (multiplier greater than 1)
@@ -27,7 +27,7 @@ TRACKING_GRACE = 0.5
 # (Number of frames)
 ROLLING_AVG_COUNT = 5
 # (Pixels)
-CENTER_WIDTH = 10
+CENTER_WIDTH = 15
 # (N)
 SERVO_PIN = 12
 # (Pulse width ms)
