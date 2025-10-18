@@ -37,3 +37,4 @@ class ServoController:
             else:
                 self.currentDuty = self.maxDuty
         lgpio.tx_pwm(self.handle, self.pin, self.frequency, self.currentDuty)
+        #print((self.currentDuty - self.minDuty) / (self.maxDuty - self.minDuty) * 180)
