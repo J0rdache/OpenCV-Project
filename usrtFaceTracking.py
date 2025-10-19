@@ -118,7 +118,7 @@ class FaceTracker:
             self.targetAvgX = 0
         
         frame = self.drawOnFrame(frame)
-        cv2.imshow('USRT Face Tracking', frame)
+        #cv2.imshow('USRT Face Tracking', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             return 0
         if not len(self.faces) and time.time() - self.lastGraceTime > self.TrackingGrace:
