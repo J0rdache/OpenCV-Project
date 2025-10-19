@@ -37,7 +37,7 @@ SERVO_MAX = 2.5
 # (Degrees per second)
 SPEED = 30
 # (Boolean)
-REVERSE = False
+REVERSE = True
 
 fifoQueue = queue.Queue()
 

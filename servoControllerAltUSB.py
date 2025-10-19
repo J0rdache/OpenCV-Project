@@ -1,8 +1,17 @@
-import lgpio
+import serial
+import time
 
 
 class ServoController:
     def __init__(self, servo_pin, minMs, maxMs, speed, reverse):
+
+        try:
+            self.ser = serial.Serial('COM6', 115200, timeout=0.1)
+            time.sleep(2)
+        except serial.SerialException as e:
+            self.ser = None
+            return
+
         self.pin = servo_pin
         self.minDuty = (minMs * 100) / 20
         self.maxDuty = (maxMs * 100) / 20
@@ -12,13 +21,11 @@ class ServoController:
         self.reversed = 1 if reverse else 0
         self.frequency = 50
 
-        self.handle = lgpio.gpiochip_open(4)
-
-        lgpio.tx_pwm(self.handle, self.pin, self.frequency, self.currentDuty)
+        
     
     def __del__(self):
-        lgpio.tx_pwm(self.handle, self.pin, self.frequency, 0)
-        lgpio.gpiochip_close(self.handle)
+        if hasattr(self, 'ser') and self.ser is not None:
+            self.ser.close()
 
     def updateStatus(self, status):
         self.status = status
@@ -36,5 +43,14 @@ class ServoController:
                 self.currentDuty += self.speed * 0.02
             else:
                 self.currentDuty = self.maxDuty
-        lgpio.tx_pwm(self.handle, self.pin, self.frequency, self.currentDuty)
+
+        command = f"{int(round(self.currentDuty * 10000))}\n"
+        if self.ser is None:
+            return
+        try:
+            #print("Sending" + str(command.encode('ascii')))
+            self.ser.write(command.encode('ascii'))
+        except serial.SerialException as e:
+            print(f"Error writing to serial port: {e}")
+            self.ser = None
         #print((self.currentDuty - self.minDuty) / (self.maxDuty - self.minDuty) * 180)
