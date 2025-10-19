@@ -12,8 +12,8 @@ class ServoController:
         self.reversed = 1 if reverse else 0
         self.frequency = 50
 
-        pwm = HardwarePWM(pwm_channel=2, hz=self.frequency, chip=0)
-        pwm.start(self.currentDuty)
+        self.pwm = HardwarePWM(pwm_channel=2, hz=self.frequency, chip=0)
+        self.pwm.start(self.currentDuty)
     
     def __del__(self):
         self.pwm.stop()
