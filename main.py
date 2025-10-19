@@ -5,7 +5,7 @@ import threading
 import time
 
 # (Pixels)
-CAMERA_WIDTH = 400
+CAMERA_WIDTH = 320
 # (Pixels)
 CAMERA_HEIGHT = 240
 # (Frames per second)
