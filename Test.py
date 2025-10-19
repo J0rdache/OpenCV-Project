@@ -1,5 +1,5 @@
 import usrtFaceTracking as ft
-import servoController as sc
+import servoControllerAltUSB as sc
 import queue
 import threading
 import time
@@ -9,7 +9,7 @@ CAMERA_WIDTH = 320
 # (Pixels)
 CAMERA_HEIGHT = 240
 # (Frames per second)
-CAMERA_FPS = 15
+CAMERA_FPS = 8
 # (N)
 CAMERA_INDEX = 0
 # (File containing cascade classifier)
@@ -27,7 +27,7 @@ TRACKING_GRACE = 0.5
 # (Number of frames)
 ROLLING_AVG_COUNT = 5
 # (Pixels)
-CENTER_WIDTH = 45
+CENTER_WIDTH = 15
 # (N)
 SERVO_PIN = 12
 # (Pulse width ms)
@@ -35,7 +35,7 @@ SERVO_MIN = 0.5
 # (Pulse width ms)
 SERVO_MAX = 2.5
 # (Degrees per second)
-SPEED = 30
+SPEED = 90
 # (Boolean)
 REVERSE = True
 
@@ -55,15 +55,12 @@ def servo_thread(servo):
         time.sleep(0.02)
 
 def main():
-    tracker1 = ft.FaceTracker(CAMERA_WIDTH, CAMERA_HEIGHT, CAMERA_FPS, CAMERA_INDEX, CASCADE_CLASSIFIER, SCALE_FACTOR,
-                              MIN_NEIGHBORS, MIN_SIZE, MOTION_TOLERANCE, TRACKING_GRACE, ROLLING_AVG_COUNT,
-                              CENTER_WIDTH)
     
     servo1 = sc.ServoController(SERVO_PIN, SERVO_MIN, SERVO_MAX, SPEED, REVERSE)
     t_servo = threading.Thread(target=servo_thread, args =(servo1,))
     t_servo.start()
     while True:
-        status = tracker1.update()
+        status = int(input("Please enter status: "))
         fifoQueue.put(status)
         if status == 0:
             break
