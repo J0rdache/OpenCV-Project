@@ -52,7 +52,7 @@ class ServoController:
                 self.currentDuty = self.maxDuty
 
         command = f"{int(round(self.currentDuty * 10000))}\n"
-        print(command)
+        #print(command)
         if self.ser is None:
             return
         try:
