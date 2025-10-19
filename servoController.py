@@ -1,4 +1,4 @@
-from rpi_hardware.pwm import HardwarePWM
+from rpi_hardware_pwm import HardwarePWM
 
 
 class ServoController:
@@ -12,7 +12,7 @@ class ServoController:
         self.reversed = 1 if reverse else 0
         self.frequency = 50
 
-        pwm = HardwarePWM(pwm_channel=0, hz=self.frequency, chip=0)
+        pwm = HardwarePWM(pwm_channel=2, hz=self.frequency, chip=0)
         pwm.start(self.currentDuty)
     
     def __del__(self):

@@ -1,5 +1,5 @@
 import usrtFaceTracking as ft
-import servoControllerAltUSB as sc
+import servoController as sc
 import queue
 import threading
 import time
@@ -29,7 +29,7 @@ ROLLING_AVG_COUNT = 1
 # (Pixels)
 CENTER_WIDTH = 120
 # (N)
-SERVO_PIN = 12
+SERVO_PIN = 18
 # (Pulse width ms)
 SERVO_MIN = 0.5
 # (Pulse width ms)
@@ -62,13 +62,18 @@ def main():
     servo1 = sc.ServoController(SERVO_PIN, SERVO_MIN, SERVO_MAX, SPEED, REVERSE)
     t_servo = threading.Thread(target=servo_thread, args =(servo1,))
     t_servo.start()
-    while True:
-        status = tracker1.update()
-        fifoQueue.put(status)
-        if status == 0:
-            break
-            
-    t_servo.join()
+    try:
+        while True:
+            status = tracker1.update()
+            fifoQueue.put(status)
+            if status == 0:
+                break
+        t_servo.join()
+    except KeyboardInterrupt:
+        fifoQueue.put(0)
+        t_servo.join()
+
+    
 
 if __name__ == "__main__":
     main()
