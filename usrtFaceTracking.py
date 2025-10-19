@@ -6,7 +6,7 @@ class FaceTracker:
                  CameraFps, CameraIndex, Classifier, ScaleFactor, 
                  MinNeighbors, MinSize, MotionTolerance, 
                  TrackingGrace, RollingAvgCount, CenterWidth):
-
+    
         self.face_cascade = cv2.CascadeClassifier(Classifier)
 
         self.cap = cv2.VideoCapture(CameraIndex)

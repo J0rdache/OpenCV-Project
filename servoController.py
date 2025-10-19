@@ -23,7 +23,14 @@ class ServoController:
     
     def runServoLoop(self):
         if self.status == 1:
-            self.currentDuty = self.minDuty + (self.maxDuty - self.minDuty) / 2
+            targetDuty = self.minDuty + (self.maxDuty - self.minDuty) / 2
+            if abs(self.currentDuty - targetDuty) > self.speed * 0.02:
+                if self.currentDuty > targetDuty:
+                    self.currentDuty -= self.speed * 0.02
+                else:
+                    self.currentDuty += self.speed * 0.02
+            else:
+                self.currentDuty = targetDuty
         elif self.status == 3 + self.reversed:
             if (self.currentDuty - self.speed * 0.02 > self.minDuty):
                 self.currentDuty -= self.speed * 0.02

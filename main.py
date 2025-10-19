@@ -1,5 +1,5 @@
 import usrtFaceTracking as ft
-import servoController as sc
+import servoControllerAltUSB as sc
 import queue
 import threading
 import time
@@ -27,7 +27,7 @@ TRACKING_GRACE = 0.5
 # (Number of frames)
 ROLLING_AVG_COUNT = 5
 # (Pixels)
-CENTER_WIDTH = 45
+CENTER_WIDTH = 80
 # (N)
 SERVO_PIN = 12
 # (Pulse width ms)
