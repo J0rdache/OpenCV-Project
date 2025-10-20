@@ -7,7 +7,7 @@ import time
 # (Pixels)
 CAMERA_WIDTH = 640
 # (Pixels)
-CAMERA_HEIGHT = 320
+CAMERA_HEIGHT = 480
 # (Frames per second)
 CAMERA_FPS = 30
 # (N)
