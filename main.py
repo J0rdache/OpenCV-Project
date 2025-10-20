@@ -5,11 +5,11 @@ import threading
 import time
 
 # (Pixels)
-CAMERA_WIDTH = 320
+CAMERA_WIDTH = 640
 # (Pixels)
-CAMERA_HEIGHT = 240
+CAMERA_HEIGHT = 320
 # (Frames per second)
-CAMERA_FPS = 15
+CAMERA_FPS = 30
 # (N)
 CAMERA_INDEX = 0
 # (File containing cascade classifier)
@@ -25,7 +25,7 @@ MOTION_TOLERANCE = 0.75
 # (Seconds)
 TRACKING_GRACE = 0.5
 # (Number of frames)
-ROLLING_AVG_COUNT = 1
+ROLLING_AVG_COUNT = 3
 # (Pixels)
 CENTER_WIDTH = 60
 # (N)
